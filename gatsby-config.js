@@ -1,5 +1,3 @@
-const contentfulConfig = require('./.contentful')
-
 // If the contentfulConfig can't be found assume the site is being built via Netlify with production environment variables
 try {
   var contentfulConfig = require('./.contentful')
@@ -13,10 +11,10 @@ try {
 }
 
 module.exports = {
-  pathPrefix: '/gatsby-contentful-starter',
   plugins: [
     'gatsby-transformer-remark',
     'gatsby-plugin-react-helmet',
+    'gatsby-plugin-styled-components',
     {
       resolve: 'gatsby-source-contentful',
       options:
