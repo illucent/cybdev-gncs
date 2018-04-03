@@ -1,42 +1,85 @@
-const Promise = require('bluebird')
-const path = require('path')
+const path = require(`path`)
 
 exports.createPages = ({ graphql, boundActionCreators }) => {
-  const { createPage } = boundActionCreators
+  const { createPage } = boundActionCreators;
 
-  return new Promise((resolve, reject) => {
-    const blogPost = path.resolve('./src/templates/blog-post.js')
-    resolve(
-      graphql(
-        `
-          {
-            allContentfulBlogPost {
-              edges {
-                node {
-                  title
-                  slug
-                }
-              }
+  const loadPosts = new Promise((resolve, reject) => {
+    graphql(`
+      {
+        allContentfulPost {
+          edges {
+            node {
+              slug
             }
           }
-          `
-      ).then(result => {
-        if (result.errors) {
-          console.log(result.errors)
-          reject(result.errors)
         }
-
-        const posts = result.data.allContentfulBlogPost.edges
-        posts.forEach((post, index) => {
-          createPage({
-            path: `/blog/${post.node.slug}/`,
-            component: blogPost,
-            context: {
-              slug: post.node.slug
-            },
-          })
+      }
+    `
+    ).then(result => {
+        result.data.allContentfulPost.edges.map(({ node }) => {
+        createPage({
+          path: `${node.slug}/`,
+          component: path.resolve(`./src/templates/post.js`),
+          context: {
+            slug: node.slug,
+          },
         })
       })
-    )
+      resolve()
+    })
   })
-}
+
+  const loadPages = new Promise((resolve, reject) => {
+    graphql(`
+      {
+        allContentfulPage {
+          edges {
+            node {
+              slug
+            }
+          }
+        }
+      }
+    `
+    ).then(result => {
+        result.data.allContentfulPage.edges.map(({ node }) => {
+        createPage({
+          path: `${node.slug}/`,
+          component: path.resolve(`./src/templates/page.js`),
+          context: {
+            slug: node.slug,
+          },
+        })
+      })
+      resolve()
+    })
+  })
+
+  const loadTags = new Promise((resolve, reject) => {
+    graphql(`
+      {
+        allContentfulTag {
+          edges {
+            node {
+              slug
+            }
+          }
+        }
+      }
+    `
+    ).then(result => {
+        result.data.allContentfulTag.edges.map(({ node }) => {
+        createPage({
+          path: `tag/${node.slug}/`,
+          component: path.resolve(`./src/templates/tag.js`),
+          context: {
+            slug: node.slug,
+          },
+        })
+      })
+      resolve()
+    })
+  })
+
+  return Promise.all([loadPosts, loadPages, loadTags])
+};

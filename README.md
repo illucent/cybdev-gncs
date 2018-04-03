@@ -1,69 +1,132 @@
-# gatsby-contentful-starter
+# gatsby-starter-gcn
+A starter template to build amazing static websites with Gatsby, Contentful and Netlify. Inspired by [gatsby-contentful-starter](https://github.com/contentful-userland/gatsby-contentful-starter).
 
-Gatsby [Contentful](https://www.contentful.com) starter for creating a blog
+## Features
+* Contentful integration with ready to go placeholder content
+* Netlify integration including a pre-built contact form
+* Minimal responsive design - made to customize or tear apart
+* Styled components
+* SEO friendly
 
-![The index page of the starter blog](https://rawgit.com/contentful-userland/gatsby-contentful-starter/master/screenshot.jpg "The index page of the starter blog")
+## Demo
+https://gcn.netlify.com/
 
-Static sites are scalable, secure and have very little required maintenance. They come with a drawback though. Not everybody feels good editing files, building a project and uploading it somewhere. This is where Contentful comes into play.
+![](screenshots/demo.jpg)
 
-With Contentful and Gatsby you can connect your favorite static site generator with an API that provides an easy to use interface for people writing content and automate the publishing using services like [Travis CI](https://travis-ci.org/) or [Netlify](https://www.netlify.com/).
+## Getting Started
 
-## Contribution
-
-This project is part of [contentful-userland](https://github.com/contentful-userland) which means that we’re always open to contributions and pull requests. You can learn more about how contentful userland is organized by visiting [our about repository](https://github.com/contentful-userland/about).
-
-## Requirements
-
-To use this project you have to have a Contentful account. If you don't have one yet you can register at [www.contentful.com/sign-up](https://www.contentful.com/sign-up/).
-
-## Getting started
-
-### Get the source code and install dependencies.
-
+### Install
 ```
-$ git clone git@github.com:contentful-userland/gatsby-contentful-starter.git
-$ npm i
+git clone https://github.com/ryanwiemer/gatsby-starter-gcn.git
+npm i
 ```
 
-Or use the [Gatsby CLI](https://www.npmjs.com/package/gatsby-cli).
+Or via the [Gatsby CLI](https://www.npmjs.com/package/gatsby-cli)
 
 ```
-$ gatsby new contentful-starter https://github.com/contentful-userland/gatsby-contentful-starter
+gatsby new gatsby-starter-gcn https://github.com/ryanwiemer/gatsby-starter-gcn.git
 ```
 
-### Set up of the needed content model and create a configuration file
+### Setup Contentful
 
-This project comes with a Contentful setup command `npm run setup`.
+1. [Sign up](https://www.contentful.com/sign-up/) for Contentful and create a new empty space
 
-![Command line dialog of the npm run setup command](https://rawgit.com/contentful-userland/gatsby-contentful-starter/master/setup.jpg "Command line dialog of the npm run setup command")
+2. `npm run setup`
 
-This command will ask you for a space ID, and access tokens for the Contentful Management, Preview and Delivery API and then import the needed content model into the space you define and write a config file (`./contentful.json`).
+3. Enter in the requested info for your Contentful space found here: **app.contentful.com** → **Space Settings** → **API keys**  
 
-`npm run setup` automates that for you but if you want to do it yourself rename `.contentful.json.sample` to `.contentful.json` and add your configuration in this file.
+## Customization
 
-## Crucial Commands
+### Website Data
 
-This project comes with a few handy commands for linting and code fixing. The most important ones are the ones to develop and ship code. You can find the most important commands below.
+Edit `/src/utils/siteConfig.js`
 
-### `npm run dev`
+```
+module.exports = {
+  siteTitle: 'GCN',
+  siteDescription: 'A starter template to build amazing static websites with Gatsby, Contentful and Netlify',
+  siteUrl: 'https://gcn.netlify.com'
+};
+```
 
-Run in the project locally using the [Contentful Preview API](https://www.contentful.com/developers/docs/references/content-preview-api/). This can perfect to preview changes before they go into production.
+### Theme
 
-### `npm run build`
+Edit `/src/styles/theme.js`
 
-Run a production build into `./public`. The result is ready to be put on any static hosting you prefer.
+```
+const theme = {
+  colors: {
+    base: '#121212',
+    secondary: '#e9e9e9',
+    tertiary: '#f3f3f3',
+    highlight: '#5b8bf7'
+  },
+  sizes: {
+    maxWidth: '1200px',
+    maxWidthCentered: '650px'
+  },
+  responsive: {
+    small: '35em',
+    medium: '50em',
+    large: '70em'
+  }
+};
+```
 
-### `npm run deploy`
+## Deployment
 
-Run a production build into `./public` and publish the site to GitHub pages.
+### Manual Netlify Deployment
 
-## Roadmap
+1. Run `gatsby build`
 
-- [ ] [make the starter completely responsive](https://github.com/contentful-userland/gatsby-contentful-starter/issues/2)
-- [ ] [include tags](https://github.com/contentful-userland/gatsby-contentful-starter/issues/3)
-- [ ] [support traced placeholders](https://github.com/contentful-userland/gatsby-contentful-starter/issues/4)
-- [ ] [add i18n](https://github.com/contentful-userland/gatsby-contentful-starter/issues/6)
+2. Drag and drop the folder `/public/` into Netlify
 
-## Other resources
+### Netlify Deployment From Git (Recommended)
 
-- Tutorial video series ["Building a blazing fast website with GatsbyJS and Contentful"](https://www.youtube.com/watch?v=Ek4o40w1tH4&list=PL8KiuH6vpACV-F7jXribe4YveGBhBeG9A) by @Khaledgarbaya
+1. [New Netlify website from Git](https://app.netlify.com/start)
+
+2. Connect with GitHub and select your repo
+
+3. Navigate to Netlify: **Settings** → **Build & Deploy** → **Build Environment Variables**. Add the following environment variables using the space id and production access token from Contentful. They must be named exactly like this in order to work properly.
+
+```
+ACCESS_TOKEN
+SPACE_ID
+```
+
+![](screenshots/netlify-build-environment-variables.jpg)
+
+4. Navigate to Netlify: **Deploys**. Click `Trigger deploy` to manually trigger a deploy to confirm the website is building successfully using your build environment variables. At this point be aware that every time you push to `master` a deploy will automatically start and be published to production.
+
+## Additional Settings
+
+### Contentful Webhook (Optional)
+
+1. Navigate to Netlify:
+**Settings** → **Build & Deploy** → **Build hooks**.
+Create a new build hook.
+
+2. Navigate to Contentful:
+ **app.contentful.com** → **Space Settings** → **Webhooks**. Create a webhook using the Netlify build URL that you just created
+ and configure which events should trigger the build on production. For example the following will rebuild the production website every time a post or page is published, unpublished or deleted:
+
+![](screenshots/contentful-webhook-selected-events.jpg)
+
+
+### Netlify Form Notifications (Optional)
+
+1. Navigate to Netlify:
+**Forms** → **Notifications**
+
+2. Click the add notification dropdown and select your desired notification method.
+
+![](screenshots/netlify-form-notifcations.jpg)
+
+## Useful Tips
+* If you make edits to your Contentful space while running `gatsby develop` you will need to stop it and rerun the command to see the changes reflected. For example a new post or page will not automatically show up until the website has been rebuilt.
+
+* Currently this template assumes you have at least **one page**, **one post** and **one tag** in Contentful. If you do not the website will fail to build.
+
+* Remove `/static/robots.txt` if you want your website to be crawled by search engines.
+
+* **DO NOT** store your Contentful access tokens or space ids anywhere in GitHub. Treat them like passwords.

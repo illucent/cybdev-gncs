@@ -1,74 +1,56 @@
 import React from 'react'
-import Link from 'gatsby-link'
-import get from 'lodash/get'
 import Helmet from 'react-helmet'
-import Hero from '../components/hero'
-import ArticlePreview from '../components/article-preview'
+import styled from 'styled-components'
+import config from '../utils/siteConfig'
+import CardList from '../components/CardList'
+import Card from '../components/Card'
+import Container from '../components/Container'
+import PageTitle from '../components/PageTitle'
 
-class RootIndex extends React.Component {
-  render() {
-    const siteTitle = get(this, 'props.data.site.siteMetadata.title')
-    const posts = get(this, 'props.data.allContentfulBlogPost.edges')
-    const [author] = get(this, 'props.data.allContentfulPerson.edges')
+const Index = ({data}) =>  {
 
-    return (
-      <div style={{ background: '#fff' }}>
-        <Helmet title={siteTitle} />
-        <Hero person={author} />
-        <div className="wrapper">
-          <h2 className="section-headline">Recent articles</h2>
-          <ul className="article-list">
-            {posts.map(({ node }) => {
-              return (
-                <li key={node.slug}>
-                  <ArticlePreview article={node} />
-                </li>
-              )
-            })}
-          </ul>
-        </div>
-      </div>
-    )
-  }
+  const posts = data.allContentfulPost.edges;
+
+  return (
+    <Container>
+      <PageTitle small>
+        <a href="https://www.gatsbyjs.org/" target="_blank">Gatsby</a>, <a href="https://www.contentful.com/" target="_blank">Contentful</a> and <a href="https://www.netlify.com/" target="_blank">Netlify</a> <span>🎉</span>
+      </PageTitle>
+      <CardList>
+        {posts.map(({ node: post })=> (
+          <Card
+           key={post.id}
+           slug={post.slug}
+           image={post.heroImage}
+           title={post.title}
+           date={post.publishDate}
+           excerpt={post.body}
+          />
+        ))}
+      </CardList>
+    </Container>
+  )
 }
 
-export default RootIndex
-
-export const pageQuery = graphql`
-  query HomeQuery {
-    allContentfulBlogPost(sort: { fields: [publishDate], order: DESC }) {
+export const query = graphql`
+  query indexQuery {
+    allContentfulPost(limit: 1000, sort: {fields: [publishDate], order: DESC}) {
       edges {
         node {
           title
+          id
           slug
-          publishDate(formatString: "MMMM Do, YYYY")
-          tags
+          publishDate(formatString: "MMMM DD, YYYY")
           heroImage {
-            file {
-              url
+            title
+            sizes(maxWidth: 800) {
+              ...GatsbyContentfulSizes_withWebp_noBase64
             }
           }
-          description {
+          body {
             childMarkdownRemark {
               html
-            }
-          }
-        }
-      }
-    }
-    allContentfulPerson(filter: { id: { eq: "c15jwOBqpxqSAOy2eOO4S0m" } }) {
-      edges {
-        node {
-          name
-          shortBio {
-            shortBio
-          }
-          title
-          image {
-            file {
-              url
-              fileName
-              contentType
+              excerpt(pruneLength: 80)
             }
           }
         }
@@ -76,3 +58,5 @@ export const pageQuery = graphql`
     }
   }
 `
+
+export default Index
