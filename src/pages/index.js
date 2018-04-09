@@ -25,6 +25,7 @@ const Index = ({data}) =>  {
            title={post.title}
            date={post.publishDate}
            excerpt={post.body}
+           readtime={post.body.childMarkdownRemark.timeToRead}
           />
         ))}
       </CardList>
@@ -50,6 +51,7 @@ export const query = graphql`
           body {
             childMarkdownRemark {
               html
+              timeToRead
               excerpt(pruneLength: 80)
             }
           }

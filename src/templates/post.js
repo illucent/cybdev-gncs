@@ -9,6 +9,7 @@ import PageBody from '../components/PageBody'
 import TagList from '../components/TagList'
 import PostLinks from '../components/PostLinks'
 import PostDate from '../components/PostDate'
+import PostReadTime from '../components/PostReadTime'
 
 const PostTemplate = ({data}) => {
 
@@ -20,6 +21,7 @@ const PostTemplate = ({data}) => {
     description,
     body,
     publishDate,
+    timeToRead,
     tags,
   } = data.contentfulPost;
 
@@ -47,6 +49,7 @@ const PostTemplate = ({data}) => {
       <Container>
         {tags && (<TagList tags={tags} />)}
         <PostDate date={publishDate}/>
+        <PostReadTime timeToRead={body.childMarkdownRemark.timeToRead}/>
         <PageBody body={body} />
         <PostLinks previous={postIndex.previous} next={postIndex.next} />
       </Container>
@@ -76,6 +79,7 @@ export const query = graphql`
       body {
         childMarkdownRemark {
           html
+          timeToRead
         }
       }
     }
