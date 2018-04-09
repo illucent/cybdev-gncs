@@ -12,6 +12,9 @@ const Nav = styled.nav`
   max-width: ${props => props.theme.sizes.maxWidth};
   margin: 0 auto;
   padding: 0 1.5em;
+  @media (max-width: 768px) {
+    max-width: ${props => props.theme.sizes.maxWidthMobile};
+  }
 
   ul {
     display: flex;

@@ -48,6 +48,9 @@ const Title = styled.h1`
   transform: translate(-50%, -50%);
   text-align: center;
   color: white;
+  @media (max-width: 768px) {
+    max-width: ${props => props.theme.sizes.maxWidthCenteredMobile};
+  }
 `
 
 const Hero = (props) => (

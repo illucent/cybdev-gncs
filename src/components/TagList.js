@@ -5,6 +5,9 @@ import Link from 'gatsby-link'
 const List = styled.ul`
   margin: 0 auto 2em auto;
   max-width: ${props => props.theme.sizes.maxWidthCentered};
+  @media (max-width: 768px) {
+    max-width: ${props => props.theme.sizes.maxWidthCenteredMobile};
+  }
 `
 
 const Tag = styled.li`

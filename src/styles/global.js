@@ -59,7 +59,8 @@ injectGlobal`
   }
 
   body {
-    background: white;
+    background: ${props => props.theme.colors.white};
+    color: ${props => props.theme.colors.black}
     font-size: 100%;
     -webkit-text-size-adjust: 100%;
     font-variant-ligatures: none;

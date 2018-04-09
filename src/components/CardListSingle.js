@@ -3,8 +3,9 @@ import styled from 'styled-components'
 
 const List = styled.ul`
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: 1fr;
   grid-gap: 1rem;
+  height: 100%
   position: relative;
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
@@ -19,7 +20,7 @@ const Content = styled.div`
   position: relative;
 `;
 
-const CardListSingle = (props) => {
+const CardList = (props) => {
   return (
     <Content>
       <List>
@@ -29,4 +30,4 @@ const CardListSingle = (props) => {
   )
 }
 
-export default CardListSingle
+export default CardList

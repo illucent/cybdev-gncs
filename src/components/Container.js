@@ -3,11 +3,13 @@ import styled from 'styled-components'
 
 const Wrapper = styled.section`
   margin: 0 auto;
-  max-width: ${props => props.theme.sizes.maxWidth};
-  padding: 3em 1.5em 2em;
+  width: ${props => props.theme.sizes.maxWidth};
   display: grid;
   grid-template-columns: 1fr;
   grid-gap: 1rem;
+  @media (max-width: 768px) {
+    width: ${props => props.theme.sizes.maxWidthMobile};
+  }
 `;
 
 const Container = (props) => {

@@ -7,6 +7,9 @@ const Wrapper = styled.div`
   justify-content: space-between;
   margin: 0 auto;
   max-width: ${props => props.theme.sizes.maxWidthCentered};
+  @media (max-width: 768px) {
+    max-width: ${props => props.theme.sizes.maxWidthCenteredMobile};
+  }
   a {
     background: ${props => props.theme.colors.base};
     color: white;

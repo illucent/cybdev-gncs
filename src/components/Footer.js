@@ -6,8 +6,11 @@ const Wrapper = styled.footer`
   flex-flow: row wrap;
   justify-content: space-between;
   align-items: flex-start;
-  margin: 0 auto;
+  margin: 5rem auto 0;
   max-width: ${props => props.theme.sizes.maxWidth};
+  @media (max-width: 768px) {
+    max-width: ${props => props.theme.sizes.maxWidthMobile};
+  }
 `
 
 const List = styled.ul`

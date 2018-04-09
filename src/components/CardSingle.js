@@ -4,7 +4,7 @@ import Link from 'gatsby-link'
 import Img from 'gatsby-image'
 
 const Post = styled.li`
-min-height: 50vh;
+height: 50vh;
 position: relative;
 overflow: hidden;
 display: flex;
@@ -84,7 +84,7 @@ const Data = styled.div`
 `;
 
 
-const Card = (props) => {
+const CardSingle = (props) => {
   return (
     <Post>
       <Link to={`/${props.slug}/`}>
@@ -100,4 +100,4 @@ const Card = (props) => {
   )
 }
 
-export default Card
+export default CardSingle
